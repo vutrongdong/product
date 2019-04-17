@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace Modules\Web\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Modules\Web\Http\Controllers\Controller;
+use Auth;
+use App\Entities\User;
 
 class LoginController extends Controller
 {
@@ -35,5 +38,25 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function showLoginForm(Request $request)
+    {
+        return view('web::auth.login');
+    }
+
+    public function login(Request $request)
+    {
+        if (Auth::attempt(['name'=>$request->name, 'password'=> $request->password])) {
+            return redirect('/admin');
+        }
+        else {
+            return back()->withInput()->with('error', 'Tài khoản hoặc mật khẩu không chính xác');
+        }
+    }
+
+    public function logout(Request $request) {
+        Auth::logout();
+        return redirect('/login');
     }
 }
