@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 const apiRequest = (url, methodType, data = {}, multipart = false) => {
     let headers;
     headers = {};
@@ -7,6 +6,7 @@ const apiRequest = (url, methodType, data = {}, multipart = false) => {
     if (multipart) {
         headers['content-type'] = 'multipart/form-data';
     }
+    console.log(headers)
 
     return new Promise(
         (resolve, reject) => {
@@ -20,11 +20,7 @@ const apiRequest = (url, methodType, data = {}, multipart = false) => {
                     resolve(response.data);
                 })
                 .catch(function (error) {
-                    if (error && error.response && error.response.status === 401) {
-                        window.location.reload();
-                        console.warn('unauthorized, logging out ...' + url);
-                        postForm('/logout', {toLogin: true, to: location.pathname + location.search + location.hash});
-                    }
+                    console.log(error)
                     reject(error.response.data);
                 });
         });

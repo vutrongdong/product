@@ -91,6 +91,9 @@
                                 <li>
                                     <router-link :to="{ name: 'product'}">{{ __('Sản phẩm') }}</router-link>
                                 </li>
+                                <li>
+                                    <router-link :to="{ name: 'slide'}">{{ __('Slide') }}</router-link>
+                                </li>
                             </ul>
                         </li>
 

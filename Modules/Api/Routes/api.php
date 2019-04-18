@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/api', function (Request $request) {
-    return $request->user();
+Route::prefix('/')->group(function () {
+    Route::get('/user', 'UserController@index');
+    Route::put('/user/reset_pass/{id}', 'UserController@resetPass');
+    Route::post('/slides/upload', 'SlideController@uploadImage');
+    Route::post('/slide/create/', 'SlideController@create');
 });
