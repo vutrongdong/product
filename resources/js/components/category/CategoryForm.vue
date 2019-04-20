@@ -4,43 +4,23 @@
         <div class="row">
             <div class="col-6">
                 <div class="form-group">
-                    <label class="text-right" for="name">Tên (<span class="text-danger">*</span>)</label>
-                    <input type="text" id="name" :class="{'form-control' : true, 'is-invalid': errors.has('name')}" placeholder="Nhập tên" v-model="category.name" name="name" v-validate="'required'" data-vv-as="họ tên" @keydown="generateSlug" @change="generateSlug" @keyup="generateSlug">
-                    <div v-show="errors.has('name')" class="text-danger">{{ errors.first('name') }}</div>
+                    <label class="text-right" for="title">Tên (<span class="text-danger">*</span>)</label>
+                    <input type="text" id="title" :class="{'form-control' : true, 'is-invalid': errors.has('title')}" placeholder="Nhập tên" v-model="category.title" name="title" v-validate="'required'" data-vv-as="họ tên" @keydown="generateSlug" @change="generateSlug" @keyup="generateSlug">
+                    <div v-show="errors.has('title')" class="text-danger">{{ errors.first('title') }}</div>
                 </div>
                 <div class="form-group">
                     <label class="text-right" for="slug">Slug (<span class="text-danger">*</span>)</label>
                     <input type="text" id="slug" name="slug" class="form-control" placeholder="Nhập slug" v-model="category.slug" v-validate="'required'" data-vv-as="slug">
                     <div v-show="errors.has('slug')" class="text-danger">{{ errors.first('slug') }}</div>
                 </div>
-                <!-- <div class="form-group">
-                    <label class="text-right" for="icon">Icon</label>
-                    <input type="text" id="icon" class="form-control" placeholder="Nhập icon" v-model="category.icon">
-                </div> -->
             </div>
             <div class="col-6">
                 <div class="form-group">
                     <label class="text-right" for="parent_id">Danh mục cha</label>
                     <select class="form-control" id="parent_id" v-model="category.parent_id">
                         <option :value="''">Chọn danh mục cha</option>
-                        <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}</option>
+                        <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.title }}</option>
                     </select>
-                </div>
-                <div class="form-group">
-                    <label class="text-right" for="priority">Độ ưu tiên</label>
-                    <input type="number" id="priority" class="form-control" placeholder="Nhập priority" v-model="category.priority">
-                </div>
-                <div class="form-group">
-                    <label class="text-right">Trạng thái</label>
-                    <div class="checkbox checkbox-success">
-                        <input id="active" v-model="category.active" type="checkbox">
-                        <label for="active" v-if="category.active">
-                            Hoạt động
-                        </label>
-                        <label for="active" v-else>
-                            Không hoạt động
-                        </label>
-                    </div>
                 </div>
             </div>
         </div>
@@ -55,6 +35,7 @@
 </template>
 <script>
 import { debounce } from 'lodash'
+import {getCategoriesForSelect} from  '../../api/categories'
 export default {
     name: 'CategoryForm',
     props: {
@@ -66,12 +47,9 @@ export default {
             type: Object,
             default: () => {
                 return {
-                    name: '',
+                    title: '',
                     slug: '',
-                    icon: '',
-                    priority: 0,
                     parent_id: '',
-                    active: true
                 }
             }
         }
@@ -79,28 +57,23 @@ export default {
     data() {
         return {
             category: {
-                name: '',
+                title: '',
                 slug: '',
-                icon: '',
-                priority: 0,
                 parent_id: '',
-                active: true
             },
             categories: []
         }
     },
     methods: {
         generateSlug () {
-            this.category.slug = this.stringToSlug(this.category.name)
+            this.category.slug = this.stringToSlug(this.category.title)
         },
-
-        async fetchCategoriesForSelect () {
-            try {
-                let response = await axios.get('/categories/to-select')
-                this.categories = response.data.data
-            } catch(e) {
-                this.categories = []
-            }
+        fetchCategoriesForSelect () {
+            getCategoriesForSelect(this.category.id)
+            .then(response => {
+                this.categories = response;
+            }).catch( error => {
+            })
         },
 
         stringToSlug(str)

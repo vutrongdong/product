@@ -19,21 +19,30 @@
     </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
 import { debounce } from 'lodash'
 import CategoryForm from './CategoryForm'
+import {createCategory} from  '../../api/categories'
 export default {
     components: {
         CategoryForm
     },
     methods: {
-        ...mapActions(['pushCategory']),
         formSubmit(category) {
-            this.pushCategory({
-                category: category,
-                cb: () => {
-                    $.Notification.autoHideNotify('success', 'top right', 'Thành công', 'Thêm dữ liệu thành công.')
-                    this.$router.push({ name: 'category'})
+            createCategory(category)
+            .then(response => {
+                $.Notification.autoHideNotify('success', 'top right', 'Thành công', 'Thêm dữ liệu thành công.')
+                this.$router.push({ name: 'category'})
+            }).catch( error => {
+                if(error && error.errors && error.errors.title) {
+                    error.errors.title.forEach(function(errTitle) {
+                        $.Notification.autoHideNotify('warning', 'top right', 'Cảnh báo', errTitle)
+                    })
+                }
+
+                if(error && error.errors && error.errors.slug) {
+                    error.errors.slug.forEach(function(errSlug) {
+                        $.Notification.autoHideNotify('warning', 'top right', 'Cảnh báo', errSlug)
+                    })
                 }
             })
         }

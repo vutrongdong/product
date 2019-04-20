@@ -16,11 +16,8 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('UserService', \App\Services\Domain\UserService::class);
-        $this->app->bind('MicroPcRequest', \App\Services\Domain\MicroPcService::class);
-        $this->app->bind('LineService', \App\Services\Domain\LineService::class);
-        $this->app->bind('DepartmentService', \App\Services\Domain\DepartmentService::class);
-        $this->app->bind('FileService', \App\Services\Inf\FileService::class);
-        $this->app->bind('PlayFileService', \App\Services\Domain\PlayFileService::class);
+        $this->app->bind('SlideService', \App\Services\Domain\SlideService::class);
+        $this->app->bind('CategoryService', \App\Services\Domain\CategoryService::class);
     }
 
     /**

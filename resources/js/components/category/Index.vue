@@ -29,15 +29,16 @@
                                         <th>Tên</th>
                                         <th>Slug</th>
                                         <th>Danh mục cha</th>
-                                        <th>Actions</th>
+                                        <th style="padding-left: 19px;">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(category, idx) in allCategories" :key="category.id">
                                         <td>{{ ++idx }}</td>
-                                        <td>{{ category.name }}</td>
+                                        <td>{{ category.title }}</td>
                                         <td>{{ category.slug }}</td>
-                                        <td>{{ category.parent_name }}</td>
+                                        <td v-if="category.parent">{{ category.parent.title }}</td>
+                                        <td v-else></td>
                                         <td>
                                             <router-link class="btn btn-link btn-action text-muted" :to="{name: 'category.edit', params: {id: category.id}}"><i class="fas fa-pencil-alt"></i></router-link>
                                             <a class="btn btn-link btn-action text-danger" @click="deleteCategory(category.id)"><i class="fas fa-trash-alt"></i></a>
@@ -54,6 +55,7 @@
 </template>
 <script>
 import { debounce } from 'lodash'
+import { getCategories, removeCategory } from  '../../api/categories'
 export default {
     data () {
         return {
@@ -75,12 +77,26 @@ export default {
               buttonsStyling: false,
             }).then((result) => {
               if (result) {
-                this.removeCategory(id)
-                this.filter()
+                removeCategory(id)
+                .then(response => {
+                    this.fetchCategory();
+                }).catch( error => {
+                    console.log(error)
+                })
               }
+            })
+        },
+        fetchCategory() {
+            getCategories()
+            .then(response => {
+                this.allCategories = response;
+            }).catch( error => {
             })
         }
     },
+    created() {
+        this.fetchCategory();
+    }
 }
 </script>
 
