@@ -18,6 +18,12 @@ class CategoryService
         return $categories;
     }
 
+    public function getCategoriesForBlog(){
+    	$category_blog = Category::where('slug', 'blog')->first();
+        $categories = Category::where('parent_id', $category_blog->id)->get();
+        return $categories;
+    }
+
     public function show($id){
         $category = Category::find($id);
         return $category;

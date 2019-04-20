@@ -25,7 +25,7 @@ class Slide extends Authenticatable {
     /**
      * Image width.
      */
-    public $imgWidth = 970;
+    public $imgWidth = 1200;
 
     /**
      * Image height.

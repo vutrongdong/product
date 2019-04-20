@@ -38,10 +38,14 @@
                                         <td>{{ category.title }}</td>
                                         <td>{{ category.slug }}</td>
                                         <td v-if="category.parent">{{ category.parent.title }}</td>
-                                        <td v-else></td>
-                                        <td>
+                                        <td v-else style="color: green">Đây là danh mục cấp 1</td>
+                                        <td v-if="category.slug != 'blog'">
                                             <router-link class="btn btn-link btn-action text-muted" :to="{name: 'category.edit', params: {id: category.id}}"><i class="fas fa-pencil-alt"></i></router-link>
                                             <a class="btn btn-link btn-action text-danger" @click="deleteCategory(category.id)"><i class="fas fa-trash-alt"></i></a>
+                                        </td>
+                                        <td v-else>
+                                            <i class="fas fa-pencil-alt" style="padding-left: 14px;"></i>
+                                            <a class="btn btn-link btn-action" style="padding-left: 23px;"><i class="fas fa-trash-alt"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>

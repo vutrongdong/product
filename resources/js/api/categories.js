@@ -43,6 +43,20 @@ const getCategoriesForSelect = (diffIdCurent) => {
     );
 };
 
+const getCategoriesForBlog = () => {
+    return new Promise(
+        (resolve, reject) => {
+            apiRequest('/api/categories/blog/', COMULE_CONST.api_method.get)
+                .then(response => {
+                    resolve(response.data);
+                })
+                .catch(function (error) {
+                    reject(error);
+                });
+        }
+    );
+};
+
 const getCategoriesForMenu = () => {
     return new Promise(
         (resolve, reject) => {
@@ -101,4 +115,6 @@ const removeCategory = (id) => {
 };
 
 
-export { getCategories, getCategoriesForSelect, getCategoriesForMenu, createCategory, removeCategory, getCategory, updadeCategory }
+export { getCategories, getCategoriesForSelect, getCategoriesForMenu,
+ createCategory, removeCategory, getCategory, updadeCategory,
+ getCategoriesForBlog }
