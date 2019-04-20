@@ -28,18 +28,14 @@
                                         <th>#</th>
                                         <th>Tiêu đề</th>
                                         <th>Hình Ảnh</th>
-                                        <th>Actions</th>
+                                        <th style="padding-left: 19px;">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
-
-
-
                                     <tr v-for="(slide, idx) in allSlides" :key="'slide' + slide.id">
                                         <td>{{ ++idx }}</td>
                                         <td>{{ slide.title }}</td>
-                                        <td><img src="" alt="slide"></td>
+                                        <td><img width="150px" v-if="slide.image" :src="slide.image_path" /></td>
                                         <td>
                                             <router-link class="btn btn-link btn-action text-muted" :to="{name: 'slide.edit', params: {id: slide.id}}"><i class="fas fa-pencil-alt"></i></router-link>
                                             <a class="btn btn-link btn-action text-danger" @click="deleteSlide(slide.id)"><i class="fas fa-trash-alt"></i></a>
@@ -55,7 +51,7 @@
     </div>
 </template>
 <script>
-import { debounce } from 'lodash'
+import { getSlides, removeSlide } from  '../../api/slide'
 export default {
     data () {
         return {
@@ -67,7 +63,7 @@ export default {
         }
     },
     methods: {
-        deleteBlog (id) {
+        deleteSlide (slideId) {
             swal({
               title: 'Cảnh báo?',
               text: "Bạn chắc chắn muốn xóa bản ghi này?",
@@ -81,12 +77,28 @@ export default {
               buttonsStyling: false,
             }).then((result) => {
               if (result) {
-                // this.removeBlog(id)
-                // this.filter()
+                removeSlide(slideId)
+                .then(response => {
+                    this.fetchSlides();
+                }).catch( err => {
+                    console.log(err);
+                })
               }
+            })
+        },
+        fetchSlides () {
+            getSlides()
+            .then(response => {
+                this.allSlides = response;
+            }).catch( err => {
+                console.log(err);
             })
         }
     },
+    created() {
+        let _this = this;
+        _this.fetchSlides ();
+    }
 }
 </script>
 

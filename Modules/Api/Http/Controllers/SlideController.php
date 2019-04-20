@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: longta
- * Date: 2019/03/04
- * Time: 11:03
- */
 
 namespace Modules\Api\Http\Controllers;
 
@@ -12,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Modules\Api\Http\Requests\SlideUpdateRequest;
+use Modules\Api\Http\Requests\SlideAddRequest;
 use App\Services\Domain\SlideService;
 use App\Entities\Slide;
 
@@ -36,9 +32,41 @@ class SlideController extends AuthApiBaseController
         return $this->returnSuccess($data);
     }
 
-    public function create(Request $request)
+    public function show($id)
     {
-        $data = $this->slideService->create($request);
+        $data = $this->slideService->show($id);
+        return $this->returnSuccess($data);
+    }
+
+    public function create(SlideAddRequest $request)
+    {
+        try {
+            $data = $this->slideService->create($request);
+            return $this->returnSuccess($data);
+        } catch (\Illuminate\Validation\ValidationException $validationException) {
+            return response(['data' => [
+                'errors' => $validationException->validator->errors(),
+                'exception' => $validationException->getMessage(),
+            ]])->json($data, 422);
+        }
+    }
+
+    public function update(SlideUpdateRequest $request, $id)
+    {
+        try {
+            $data = $this->slideService->update($request, $id);
+            return $this->returnSuccess($data);
+        } catch (\Illuminate\Validation\ValidationException $validationException) {
+            return response(['data' => [
+                'errors' => $validationException->validator->errors(),
+                'exception' => $validationException->getMessage(),
+            ]])->json($data, 422);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $data = $this->slideService->destroy($id);
         return $this->returnSuccess($data);
     }
 
@@ -60,10 +88,15 @@ class SlideController extends AuthApiBaseController
             } else {
                 $image = $request->file('files')[0];
             }
-            if ($request->input('resize')) {
-                return $this->model->upload($image);
+            if ($request->input('imageOld')) {
+                $imageOld = $request->input('imageOld');
+            } else {
+                $imageOld = null;
             }
-            return $this->model->upload($image, false);
+            if ($request->input('resize')) {
+                return $this->model->upload($image, true, $imageOld);
+            }
+            return $this->model->upload($image, false, $imageOld);
         } catch (\Illuminate\Validation\ValidationException $validationException) {
             return response(['data' => [
                 'errors' => $validationException->validator->errors(),

@@ -9,7 +9,7 @@ class Slide extends Authenticatable {
 	use UploadTrait;
 
     protected $fillable = [
-        'title', 'image'
+        'title', 'image', 'image_path'
     ];
 
         /**

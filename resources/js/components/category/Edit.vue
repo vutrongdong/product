@@ -21,6 +21,7 @@
 <script>
 import { debounce } from 'lodash'
 import CategoryForm from './CategoryForm'
+import { getCategory, updadeCategory } from  '../../api/categories'
 export default {
     components: {
         CategoryForm
@@ -31,18 +32,36 @@ export default {
         }
     },
     methods: {
-        // ...mapActions(['pushCategory', 'getCategory']),
         formSubmit(category) {
-            
+            updadeCategory(category)
+            .then(response => {
+                $.Notification.autoHideNotify('success', 'top right', 'Thành công', 'Sửa category thành công.')
+                this.$router.push({ name: 'category'})
+            }).catch( error => {
+                if(error && error.errors && error.errors.title) {
+                    error.errors.title.forEach(function(errTitle) {
+                        $.Notification.autoHideNotify('warning', 'top right', 'Cảnh báo', errTitle)
+                    })
+                }
+
+                if(error && error.errors && error.errors.title) {
+                    error.errors.title.forEach(function(errTitle) {
+                        $.Notification.autoHideNotify('warning', 'top right', 'Cảnh báo', errTitle)
+                    })
+                }
+            })
+        },
+        fetchCategory() {
+            getCategory(this.$route.params.id)
+            .then(response => {
+                this.category = response;
+            }).catch( err => {
+                console.log(err);
+            })
         }
     },
-    mounted() {
-        // this.getCategory({
-        //     id: this.$route.params.id,
-        //     cb: (category) => {
-        //         this.category = Object.assign({}, this.category, category)
-        //     }
-        // })
+    created() {
+        this.fetchCategory();
     }
 }
 </script>

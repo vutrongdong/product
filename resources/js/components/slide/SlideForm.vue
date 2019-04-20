@@ -12,7 +12,7 @@
                 <div class="upload" :class="{'has-image': slide.image}">
                     <label>
                         <input v-validate="valid_image" class="form-control" id="image" type="file" name="image" @change="handerSelectImage" :class="{'form-control' : true, 'is-invalid': errors.has('image')}" data-vv-as="Hình ảnh">
-                        <img style="margin-top:5px;" v-if="slide.image" :src="slide.image_path" />
+                        <img width="100%" style="margin-top:5px;" v-if="slide.image" :src="slide.image_path" />
                     </label>
                 </div>
                 <div v-show="errors.has('image')" class="text-danger">{{ errors.first('image') }}</div>
@@ -53,12 +53,18 @@ export default {
         }
     },
     methods: {
+    	setInitData() {
+            let dataSlide = { ...this.dataSlide }
+            this.slide = { ...this.slide,
+                ...dataSlide
+            }
+        },
     	async handerSelectImage (evt) {
             if (evt.target.files[0]) {
                 let formData = new FormData()
                 formData.append('file', evt.target.files[0])
                 try {
-                    let response = await axios.post('/api/slides/upload', formData, {params: {resize: 1}})
+                    let response = await axios.post('/api/slides/upload', formData, {params: {resize: 1, imageOld: this.slide.image }})
                     if (response.data.code === 1) {
                         this.slide.image = response.data.data.name
                         this.slide.image_path = response.data.data.path
@@ -94,9 +100,18 @@ export default {
             return this.$route.params.id ? '' : 'required'
         }
     },
+    created() {
+    	this.setInitData()
+    }
 }
 </script>
 
 <style scoped>
-
+.upload.has-image input{
+    display: none;
+}
+.upload label{
+    display: block;
+    text-align: center;
+}
 </style>

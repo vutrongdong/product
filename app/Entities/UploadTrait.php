@@ -9,9 +9,9 @@ trait UploadTrait
      * @param  mixed $file
      * @return array
      */
-    public function upload($file, $resize = true)
+    public function upload($file, $resize = true, $imageOld)
     {
-        $image_name = date('Y_m_d') ."_". md5($file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
+        $image_name = date('Y_m_d') ."_".date("h:i:sa"). '_' . md5($file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
 
         try {
             if ($file->getClientOriginalExtension() == 'svg') {
@@ -24,6 +24,7 @@ trait UploadTrait
             } else {
                 $upload = Image::make($file->getRealPath())->save($this->getUploadImagePath($image_name));
             }
+            $this->removeImage($imageOld);
             return $this->uploadSuccess($image_name);
         } catch (Exception $e) {
             return $this->uploadFail($e);

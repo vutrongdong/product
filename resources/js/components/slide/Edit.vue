@@ -2,52 +2,59 @@
     <div class="row">
         <div class="col-12">
             <h4 class="page-title">
-                Chỉnh sửa bài viết
+                Chỉnh sửa Slide
             </h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><router-link :to="{ name: 'home'}">Bảng điều khiển</router-link></li>
-                <li class="breadcrumb-item"><router-link :to="{ name: 'blog'}">Bài viết</router-link></li>
-                <li class="breadcrumb-item active">Chỉnh sửa bài viết</li>
+                <li class="breadcrumb-item"><router-link :to="{ name: 'slide'}">Slide</router-link></li>
+                <li class="breadcrumb-item active">Chỉnh sửa slide</li>
             </ol>
             <p class="clearfix"></p>
             <div class="card">
                 <div class="card-body">
-                    <slide-form v-if="blog.id" @submit="formSubmit" type="edit" :dataBlog="blog" />
+                    <slide-form v-if="slide.id" @submit="formSubmit" type="edit" :dataSlide="slide" />
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import { cloneDeep } from 'lodash'
 import SlideForm from './SlideForm'
+import { getSlide, updadeSlide } from  '../../api/slide'
 export default {
     components: {
         SlideForm
     },
     data () {
         return {
-            blog: {}
+            slide: {},
         }
     },
     methods: {
-        formSubmit(blog) {
-            this.pushBlog({
-                blog: blog,
-                cb: () => {
-                    $.Notification.autoHideNotify('success', 'top right', 'Thành công', 'Cập nhật dữ liệu thành công.')
-                    this.$router.push({ name: 'blog'})
+        formSubmit(slide) {
+            updadeSlide(slide)
+            .then(response => {
+                $.Notification.autoHideNotify('success', 'top right', 'Thành công', 'Sửa slide thành công.')
+                this.$router.push({ name: 'slide'})
+            }).catch( error => {
+                if(error && error.errors && error.errors.title) {
+                    error.errors.title.forEach(function(errTitle) {
+                        $.Notification.autoHideNotify('warning', 'top right', 'Cảnh báo', errTitle)
+                    })
                 }
+            })
+        },
+        fetchSlide() {
+            getSlide(this.$route.params.id)
+            .then(response => {
+                this.slide = response;
+            }).catch( err => {
+                console.log(err);
             })
         }
     },
-    mounted() {
-        this.getBlog({
-            id: this.$route.params.id,
-            cb: (blog) => {
-                this.blog = Object.assign({}, this.blog, cloneDeep(blog))
-            }
-        })
+    created() {
+        this.fetchSlide();
     }
 }
 </script>

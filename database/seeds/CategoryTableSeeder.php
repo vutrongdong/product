@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
-class UsersTableSeeder extends Seeder
+class CategoryTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,25 +12,21 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
+        DB::table('categories')->insert([
             [
-                'name' => 'admin',
-                'password' => bcrypt('admin'),
+                'title' => 'Danh mục 1',
+                'slug' => 'danh_muc_1',
+                'parent_id' => '0',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
-                'name' => 'vutrongdong',
-                'password' => bcrypt('admin'),
+                'title' => 'Danh mục 2',
+                'slug' => 'danh_muc_2',
+                'parent_id' => '1',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
-            [
-                'name' => 'vuducthang',
-                'password' => bcrypt('admin'),
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-            ]
         ]);
 
     }

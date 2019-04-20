@@ -18,4 +18,15 @@ Route::prefix('/')->group(function () {
     Route::put('/user/reset_pass/{id}', 'UserController@resetPass');
     Route::post('/slides/upload', 'SlideController@uploadImage');
     Route::post('/slide/create/', 'SlideController@create');
+    Route::put('/slide/update/{id}', 'SlideController@update');
+    Route::get('/slides', 'SlideController@index');
+    Route::get('/slide/{id}', 'SlideController@show');
+    Route::delete('/slide/{id}', 'SlideController@destroy');
+    Route::get('/categories', 'CategoryController@index');
+    Route::get('/category/{id}', 'CategoryController@show');
+    Route::get('/categories/parent/{diffIdCurent}', 'CategoryController@getCategoriesForSelect');
+    Route::get('/categories/children/', 'CategoryController@getCategoriesForMenu');
+    Route::post('/category/create', 'CategoryController@createCategory');
+    Route::put('/category/update/{id}', 'CategoryController@updadeCategory');
+    Route::delete('/category/{id}', 'CategoryController@removeCategory');
 });

@@ -6,7 +6,6 @@ const apiRequest = (url, methodType, data = {}, multipart = false) => {
     if (multipart) {
         headers['content-type'] = 'multipart/form-data';
     }
-    console.log(headers)
 
     return new Promise(
         (resolve, reject) => {

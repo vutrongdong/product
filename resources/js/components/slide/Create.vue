@@ -31,10 +31,27 @@ export default {
             .then(response => {
                 $.Notification.autoHideNotify('success', 'top right', 'Thành công', 'Thêm slide thành công.')
                 this.$router.push({ name: 'slide'})
-            }).catch( err => {
-                console.log(err);
+            }).catch( error => {
+                if(error && error.errors && error.errors.title) {
+                    error.errors.title.forEach(function(errTitle) {
+                        $.Notification.autoHideNotify('warning', 'top right', 'Cảnh báo', errTitle)
+                    })
+                }
             })
         }
     }
 }
 </script>
+
+<style scoped>
+.upload.has-image input{
+    display: none;
+}
+.upload label{
+    display: block;
+    text-align: center;
+}
+.upload img{
+    max-width: 80%;
+}
+</style>
