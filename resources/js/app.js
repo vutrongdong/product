@@ -13,6 +13,7 @@ import Routes from './route'
 import store from './store';
 import VeeValidate from 'vee-validate'
 import messages from './messages';
+import Paginate from 'vuejs-paginate'
 
 Vue.use(VeeValidate, {
     locale: 'vi',
@@ -23,6 +24,7 @@ Vue.use(VeeValidate, {
 Vue.use(VeeValidate);
 Vue.use(VueRouter);
 Vue.component('admin-layout', require('./components/AdminLayout.vue').default);
+Vue.component('paginate', Paginate)
 const router = new VueRouter({
     routes: Routes,
     mode: 'history'

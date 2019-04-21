@@ -48,11 +48,11 @@
                         </div>
                     </div>
                 </div>
-<!--                 <div class="card-footer" v-if="blogPagination.last_page > 1">
+                <div class="card-footer">
                     <nav class="pull-right">
                         <paginate
-                        :page-count="blogPagination.last_page"
-                        :page-range="5"
+                        :page-count="2"
+                        :page-range="1"
                         :margin-pages="2"
                         :click-handler="paginationChange"
                         prev-text="«"
@@ -66,7 +66,7 @@
                         prev-link-class="page-link">
                       </paginate>
                     </nav>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
@@ -96,7 +96,6 @@ export default {
         fetchBlogs() {
             getBlogs()
             .then(response => {
-                console.log(response)
                 this.allBlogs = response;
             }).catch( err => {
                 console.log(err);
