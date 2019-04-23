@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('SlideService', \App\Services\Domain\SlideService::class);
         $this->app->bind('CategoryService', \App\Services\Domain\CategoryService::class);
         $this->app->bind('BlogService', \App\Services\Domain\BlogService::class);
+        $this->app->bind('ProductService', \App\Services\Domain\ProductService::class);
     }
 
     /**

@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "vee-validate": "^2.2.3",
+        "vue-multi-select": "^3.14.1",
         "vue-router": "^3.0.6",
         "vue-simple-spinner": "^1.2.8",
         "vue-tinymce-editor": "^1.6.2",

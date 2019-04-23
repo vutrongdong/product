@@ -19,9 +19,17 @@ class CategoryService
     }
 
     public function getCategoriesForBlog(){
-    	$category_blog = Category::where('slug', 'blog')->first();
+        $category_blog = Category::where('slug', 'blog')->first();
         $categories = Category::where('parent_id', $category_blog->id)->get();
         return $categories;
+    }
+
+    public function getCategoriesForProduct(){
+    	$category_product = Category::where([
+                                        ['parent_id', '<>', 1],
+                                        ['parent_id', '<>', 0]
+                                    ])->get();
+        return $category_product;
     }
 
     public function show($id){

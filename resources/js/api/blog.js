@@ -15,10 +15,15 @@ const getBlog = (id) => {
     );
 };
 
-const getBlogs = () => {
+const getBlogs = (params) => {
+    let page = params.params.page;
+    let q = params.params.q;
+    if(q) {
+        page = '';
+    }
     return new Promise(
         (resolve, reject) => {
-            apiRequest('/api/blogs/', COMULE_CONST.api_method.get)
+            apiRequest('/api/blogs?q='+ q + '&page='+ page, COMULE_CONST.api_method.get, params)
                 .then(response => {
                     resolve(response.data);
                 })

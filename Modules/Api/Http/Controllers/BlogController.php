@@ -15,7 +15,7 @@ class BlogController extends AuthApiBaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    protected $blogService;
+    protected $blogService, $model;
 
     public function __construct(BlogService $blogService, Blog $blog)
     {
@@ -25,9 +25,9 @@ class BlogController extends AuthApiBaseController
         $this->model = $blog;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->blogService->getAllblog();
+        $data = $this->blogService->getAllblog($request->all());
         return $this->returnSuccess($data);
     }
 

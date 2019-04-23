@@ -2,14 +2,14 @@
     <div class="row">
         <div class="col-12">
             <div class="btn-group pull-right m-t-15">
-                <router-link :to="{ name: 'blog.create'}" class="btn btn-default waves-effect waves-light">Thêm mới bài viết</router-link>
+                <router-link :to="{ name: 'product.create'}" class="btn btn-default waves-effect waves-light">Thêm mới sản phẩm</router-link>
             </div>
             <h4 class="page-title">
-                Bài viết
+                Sản phẩm
             </h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><router-link :to="{ name: 'home'}">Bảng điều khiển</router-link></li>
-                <li class="breadcrumb-item active">Bài viết</li>
+                <li class="breadcrumb-item active">Sản phẩm</li>
             </ol>
             <p class="clearfix"></p>
             <div class="card">
@@ -26,25 +26,23 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Tiêu đề</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Mã</th>
+                                        <th>Giá bán</th>
                                         <th>Hiển thị</th>
-                                        <th>Hot</th>
-                                        <th>Actions</th>
+                                        <th style="padding-left: 19px;">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
-
-
-
-                                    <tr v-for="(blog, idx) in allBlogs" :key="blog.id">
+                                    <tr v-for="(product, idx) in allProducts.data" :key="product.id">
                                         <td>{{ ++idx }}</td>
-                                        <td>{{ blog.title }}</td>
-                                        <td><i class="fa fa-check text-success" v-if="blog.active"></i></td>
-                                        <td><i class="fa fa-check text-success" v-if="blog.hot"></i></td>
+                                        <td>{{ product.title }}</td>
+                                        <td>{{ product.code }}</td>
+                                        <td>{{ product.price }}</td>
+                                        <td><i class="fa fa-check text-success" v-if="product.active"></i></td>
                                         <td>
-                                            <router-link class="btn btn-link btn-action text-muted" :to="{name: 'blog.edit', params: {id: blog.id}}"><i class="fas fa-pencil-alt"></i></router-link>
-                                            <a class="btn btn-link btn-action text-danger" @click="deleteBlog(blog.id)"><i class="fas fa-trash-alt"></i></a>
+                                            <router-link class="btn btn-link btn-action text-muted" :to="{name: 'product.edit', params: {id: product.id}}"><i class="fas fa-pencil-alt"></i></router-link>
+                                            <a class="btn btn-link btn-action text-danger" @click="deleteProduct(product.id)"><i class="fas fa-trash-alt"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -58,6 +56,7 @@
 </template>
 <script>
 import { debounce } from 'lodash'
+import { getProducts, removeProduct } from  '../../api/product';
 export default {
     data () {
         return {
@@ -65,21 +64,27 @@ export default {
                 q: '',
                 page: ''
             },
-            allBlogs: []
+            allProducts: []
         }
     },
     methods: {
-        // ...mapActions(['fetchBlogs', 'removeBlog']),
         paginationChange (page) {
             this.filters.page = page
             this.filter()
         },
 
         filter: debounce(function () {
-            // this.fetchBlogs({params: this.filters})
+            this.fetchProducts()
         }, 500),
-
-        deleteBlog (id) {
+        fetchProducts() {
+            getProducts({params: this.filters})
+            .then(response => {
+                this.allProducts = response;
+            }).catch( err => {
+                console.log(err);
+            })
+        },
+        deleteProduct (id) {
             swal({
               title: 'Cảnh báo?',
               text: "Bạn chắc chắn muốn xóa bản ghi này?",
@@ -93,17 +98,20 @@ export default {
               buttonsStyling: false,
             }).then((result) => {
               if (result) {
-                this.removeBlog(id)
+                removeProduct(id)
+                .then(response => {
+                    this.fetchBlogs()
+                }).catch( err => {
+                    console.log(err);
+                })
                 this.filter()
               }
             })
         }
     },
-    computed: {
-        // ...mapGetters(['allBlogs', 'blogPagination'])
-    },
-    mounted() {
-        // this.fetchBlogs()
+
+    created() {
+        this.fetchProducts()
     }
 }
 </script>

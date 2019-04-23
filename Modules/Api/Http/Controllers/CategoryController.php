@@ -47,6 +47,12 @@ class CategoryController extends AuthApiBaseController
         return $this->returnSuccess($data);
     }
 
+    public function getCategoriesForProduct()
+    {
+        $data = $this->categoryService->getCategoriesForProduct();
+        return $this->returnSuccess($data);
+    }
+
     public function getCategoriesForMenu()
     {
         $data = $this->categoryService->getCategoriesForMenu();

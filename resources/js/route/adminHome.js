@@ -7,9 +7,9 @@ export default [
         name: 'home',
         component: Home
     },
-    {
-        path: '/admin/profile/',
-        name: 'profile',
-        component: Profile
-    }
+    // {
+    //     path: '/admin/profile/',
+    //     name: 'profile',
+    //     component: Profile
+    // }
 ]

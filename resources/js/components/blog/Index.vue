@@ -33,7 +33,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(blog, idx) in allBlogs" :key="blog.id">
+                                    <tr v-for="(blog, idx) in allBlogs.data" :key="blog.id">
                                         <td>{{ ++idx }}</td>
                                         <td>{{ blog.title }}</td>
                                         <td>{{ blog.category.title }}</td>
@@ -48,10 +48,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer" v-if="allBlogs.last_page > 1">
                     <nav class="pull-right">
                         <paginate
-                        :page-count="2"
+                        :page-count="allBlogs.last_page"
                         :page-range="1"
                         :margin-pages="2"
                         :click-handler="paginationChange"
@@ -79,7 +79,7 @@ export default {
         return {
             filters: {
                 q: '',
-                page: ''
+                page: ''    
             },
             allBlogs: []
         }
@@ -91,10 +91,10 @@ export default {
         },
 
         filter: debounce(function () {
-            this.fetchBlogs({params: this.filters})
+            this.fetchBlogs()
         }, 500),
         fetchBlogs() {
-            getBlogs()
+            getBlogs({params: this.filters})
             .then(response => {
                 this.allBlogs = response;
             }).catch( err => {

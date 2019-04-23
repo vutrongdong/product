@@ -8,8 +8,12 @@ use Illuminate\Http\Request;
 
 class BlogService
 {
-    public function getAllBlog(){
-        $categories = Blog::with('category')->get();
+    public function getAllBlog($params = [], $size = 2){
+        if ($params['q']) {
+            $categories = Blog::where('title', 'like', $params['q'].'%')->with('category')->paginate(2);
+        } else {
+            $categories = Blog::with('category')->paginate(2);
+        }
         return $categories;
     }
 

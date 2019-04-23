@@ -15,6 +15,7 @@ Route::prefix('/')->group(function () {
     Route::get('/category/{id}', 'CategoryController@show');
     Route::get('/categories/parent/{diffIdCurent}', 'CategoryController@getCategoriesForSelect');
     Route::get('/categories/blog/', 'CategoryController@getCategoriesForBlog');
+    Route::get('/categories/product/', 'CategoryController@getCategoriesForProduct');
     Route::get('/categories/children/', 'CategoryController@getCategoriesForMenu');
     Route::post('/category/create', 'CategoryController@createCategory');
     Route::put('/category/update/{id}', 'CategoryController@updadeCategory');
@@ -25,4 +26,7 @@ Route::prefix('/')->group(function () {
     Route::get('/blog/{id}', 'BlogController@show');
     Route::put('/blog/update/{id}', 'BlogController@updadeBlog');
     Route::delete('/blog/{id}', 'BlogController@removeBlog');
+    Route::get('/products', 'ProductController@index');
+    Route::post('/products/upload', 'ProductController@uploadImage');
+    Route::post('/product/create/', 'ProductController@createProduct');
 });

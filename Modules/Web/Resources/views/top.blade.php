@@ -42,9 +42,9 @@
                             <div class="dropdown-item noti-title">
                                 <h5 class="text-overflow"><small>Hi, {{ auth()->user()->name }}</small> </h5>
                             </div>
-                            <router-link class="dropdown-item notify-item" :to="{ name: 'profile'}">
+                            {{-- <router-link class="dropdown-item notify-item" :to="{ name: 'profile'}">
                                 <i class="md md-account-circle"></i> <span>{{ __('Thông tin cá nhân') }}</span>
-                            </router-link>
+                            </router-link> --}}
                             <router-link class="dropdown-item notify-item" :to="{ name: 'reset'}">
                                 <i class="fas fa-key"></i> <span>{{ __('Thay đổi mật khẩu') }}</span>
                             </router-link>
